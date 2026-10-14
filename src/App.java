@@ -1,58 +1,54 @@
-
 import java.util.Scanner;
-
-public class App {
-
-   String charName;
-   int health;
-
-   public App(String charName, int health){
-    this.charName = charName;
-    this.health = health;
-   }
-   public void ShowDebug(){
-     
-   String text =("%s is making an attack. %s's health:%d").formatted(charName,charName,health);
-   System.out.println(text);
-   }
-
-    public static  class Mage extends App {
-    int  mana;
-
-    public Mage(String charName,int health, int mana){
-        super(charName, health);
-        this.mana = mana;
-    }
-
-     @Override
-    public void ShowDebug(){
-          super.ShowDebug();
-        
-          String text =("mana used:%d").formatted(mana);
-          System.err.println(text);
-        }
-   } 
-
+public class App{
 
   
-   public static void main(String[] args) {
+  public static  class BankAccount{
+
+    String holderName;
+    double balance;
+
+    public BankAccount(String holderName,double balance){
+      this.holderName = holderName;
+      this.balance = balance;
+
+      
+    }
+    public void ShowDebug(){
+      String text = ("Holder name:%s\nCurrent Balance:%f").formatted(holderName,balance);
+      System.out.println(text);
+    }
+
+  }
+  public static class SavingAccount extends BankAccount{
+    double interestRate;
     
-    Scanner scanner = new Scanner(System.in);
+     public  SavingAccount(String holderName,double balance,double interestRate){
+      super(holderName, balance);
+      this.interestRate = interestRate;
+     }
 
-    System.out.println("Enter the name of the char");
-    String charName =scanner.nextLine();
+     @Override 
+     public void ShowDebug(){
+      super.ShowDebug();
+      String text =("Interest Rate:%f").formatted(interestRate);
+      System.out.println(text);
 
-    System.out.println("Enter the health amount");
-    int health =scanner.nextInt();
+     }
+    }
 
-    System.out.println("Enter your mana");
-    int manaVal=scanner.nextInt();
 
-     Mage myMage = new Mage(charName, health, manaVal);
-     myMage.ShowDebug();
-     
-     scanner.close();
+    public static void main(String[] args) {
+      Scanner scanner = new Scanner(System.in);
 
-     
-   }
-}
+      System.out.println("Enter your name:");
+      String userNameInput = scanner.nextLine();
+      
+      SavingAccount firstCustomer = new App.SavingAccount(userNameInput, 240, 15);
+      firstCustomer.ShowDebug();
+
+      scanner.close();
+
+    }
+
+  }
+
