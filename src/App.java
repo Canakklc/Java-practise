@@ -1,139 +1,111 @@
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-
 public class App{
+
+  public static class StudentDatas{
+
+  private String studentNumber;
+  private String nameSurname;
+  private String className;
+  private double midtermNote;
+  private double finalNote; 
   
-  public static  class Vehicle {
-  
-    String brand;
-    double dailyRate;
-
-    public Vehicle(String brand, double dailyRate){
-      this.brand = brand;
-      this.dailyRate = dailyRate; 
-
-    }
-
-    public void DisplayInfo(){
-
-      String text=("Car brand:%s\nDaily rate:%f").formatted(brand,dailyRate);
-      System.out.println(text);
-    }
-
+  public StudentDatas(String studentNumber, String nameSurname, String className, double midtermNote,double finalNote ){
+    this.studentNumber = studentNumber;
+    this.nameSurname = nameSurname;
+    this.className = className;
+    this.midtermNote = midtermNote;
+    this.finalNote = finalNote;
   }
 
-  public static class Car extends Vehicle{
+  public String getStudentNumber(){
+    return this.studentNumber;
+  }
 
-    int doorCount;
+  public String getNameSurname(){
+    return this.nameSurname;
+  }
 
-    public Car(String brand, double dailyRate, int doorCount){
-      super(brand, dailyRate);
-      this.doorCount = doorCount;
-    }
+  public String getClassName(){
+    return this.className;
+  }
 
-    @Override 
-    public void DisplayInfo(){
-      super.DisplayInfo();
+  public double GetMidterm(){
+    return this.midtermNote;
+  }
+  public double GetfinalNote(){
+    return this.finalNote;
+  }
+  public void SetMidfinal(double midtermNote, double finalNote){
+    this.midtermNote =midtermNote;
+    this.finalNote = finalNote;
+  }
+
+  public void ShowInfo(){
+    String text = ("Student Number:%s\nName and Surname:%s\nClass:%s\nMidterm:%f\nFinal:%s").formatted(studentNumber,nameSurname,className,midtermNote,finalNote);
+    System.out.println(text);
+  }
+  public class Calculation{
+
+    public double CalculateAverage(double midtermNote, double finalNote){
       
-      String text =("Door Quantity:%d").formatted(doorCount);
-      System.out.println(text);
-    }
-  }
-
-  public static class Motorcyle extends Vehicle{
-
-    boolean hasHelmet;
-
-    public Motorcyle(String brand, double dailyLimit, boolean hasHelmet){
-       super(brand, dailyLimit);
-       this.hasHelmet = hasHelmet;
+      double average =(StudentDatas.this.midtermNote * 0.40) + (StudentDatas.this.finalNote * 0.60);
+      return average;
     }
 
-    @Override 
-    public void DisplayInfo(){
-      String helmetInfo;
-      super.DisplayInfo();
-      if(hasHelmet == true){
-        helmetInfo=("Comes with helmet");
-      }else
-        {
-        helmetInfo =("Does not come with helmet");
+    public String AABB(){
+      double result = CalculateAverage(midtermNote, finalNote);
+      if(result >= 85){
+        return "AA";
       }
+      else if(result >= 75){
+        return "BA";
+      }
+      else if(result >= 65 ){
+        return "BB";
+      }
+      else if(result >= 60){
+        return "CB";
+      }
+      else if(result >=50){
+        return "CC";
+      }else{
+        return "FF Failed";
+      }
+    }
 
-      String mainText=(helmetInfo);
-      System.out.println(mainText);
-
+    public void AdjustShowInfo(){
+      
+      StudentDatas.this.ShowInfo();
+      System.out.println(Calculation.this.AABB());
     }
   }
 
   public static void main(String[] args) {
     
-    List<Vehicle> vehicleList = new ArrayList<>();
-    Map<String,Vehicle> vehicleMap = new HashMap<>();
+    try {
+      Scanner scanner = new Scanner(new File("data.txt"));
+      while(scanner.hasNextLine()){
+        String line = scanner.nextLine();
+        String Lines[] = line.split(";");
+        double midtermDouble = Double.parseDouble(Lines[3]);
+        double finalDouble = Double.parseDouble(Lines[4]);
 
-    Scanner scanner = new Scanner(System.in);
-
-    boolean locker =true;
-    System.out.println("Welcome\nPress 1 to add car\nPress 2 to add motorcyle\nPress 3 to  view all vehicles\n Press 4 to ShowVehicle info\n Press 5 to quit app");
-
-    while (locker) {
-      
-      int AnswerInput = scanner.nextInt();
-      scanner.nextLine();
-
-      switch (AnswerInput) {
-        case 1:
-          Car addCar = new App.Car("Aston Martin", 15, 2);
-          vehicleList.add(addCar);
-          vehicleMap.put(addCar.brand,addCar);
-          System.out.println("Car has been added");
-          break;
+        StudentDatas studentDatas = new StudentDatas(Lines[0], Lines[1], Lines[2],midtermDouble, finalDouble);
+        //studentDatas.ShowInfo();
         
-          
-        case 2:
-          Motorcyle addMotor = new App.Motorcyle("Mercedes", 15, false);
-          Motorcyle addMotorSec = new App.Motorcyle("Yamada", 12, true);
-
-          Motorcyle[] motors = {addMotor,addMotorSec};
-          for (Motorcyle motorsMotorcyle : motors) {
-            vehicleList.add(motorsMotorcyle);
-            vehicleMap.put(motorsMotorcyle.brand,motorsMotorcyle);
-            System.out.println("Motorcyle has been added");  
-          }
-          break;
-         case 3:
-            if (vehicleList.isEmpty()) {
-                System.out.println("List is empty");
-            } else {
-                for (int i = 0; i < vehicleList.size(); i++) {
-                    vehicleList.get(i).DisplayInfo();
-                }
-            }
-
-            break;  
-          case 4:
-            System.out.println("Enter the brand name");
-            String brandNameInput =scanner.nextLine();
-
-            if(vehicleMap.containsKey(brandNameInput)){
-              System.out.println("Car has been found");
-              Vehicle foundVehicle = vehicleMap.get(brandNameInput);
-
-              foundVehicle.DisplayInfo();
-            }else
-            {
-              System.out.println("Car could not have been found");
-            } break;
-          case 5:
-            System.out.println("Quiting");
-            locker = false;
-            break;
+        StudentDatas.Calculation cal = studentDatas.new Calculation();
+        cal.CalculateAverage(midtermDouble, finalDouble);
+        cal.AdjustShowInfo();
       }
+      
+    } catch (Exception e) {
+      System.out.println("File could not found");
     }
-
   }
+
+
+
+}
 }

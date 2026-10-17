@@ -1,0 +1,4 @@
+22010101;Ali Yilmaz;Nesne Yonelimli Programlama;65.0;80.0
+22010102;Ayse Kaya;Veri Yapilari;40.0;45.0
+22010103;Mehmet Demir;Web Programlama;90.0;85.0
+22010104;Zeynep Sahin;Nesne Yonelimli Programlama;55.0;40.0
